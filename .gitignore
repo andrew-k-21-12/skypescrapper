@@ -1,0 +1,6 @@
+configs.json
+credentials.json
+targets.json
+logs.csv
+
+node_modules/
