@@ -28,6 +28,7 @@ class SkypeScrapper {
         await this.#page.goto(SkypeScrapper.#TARGET_URL);
         await this.#fillInput(SkypeScrapper.#INPUT_LOGIN, this.#login);
         await this.#clickElement(SkypeScrapper.#INPUT_SUBMIT_NEXT); 
+        await this.#page.waitForTimeout(2000); // !!!
         await this.#fillInput(SkypeScrapper.#INPUT_PASSWORD, this.#password);
         await this.#clickElement(SkypeScrapper.#INPUT_SUBMIT_SIGNIN);
         try {
