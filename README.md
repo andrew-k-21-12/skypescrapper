@@ -39,3 +39,12 @@ LANG=en_US.UTF-8
 
 For initial configs (such as bypassing Skype's unusal location security checks)
 it's better to use `npm run interactive` manually.
+
+
+## TO DO
+
+1. Refactor and reorganize the code.
+
+2. Better interactive mode and helpful scripts with clarifications.
+
+3. Add prerequisites section (NodeJS 14, NPM, Linux libs).
