@@ -30,7 +30,10 @@ class SkypeScrapper {
         await this.#clickElement(SkypeScrapper.#INPUT_SUBMIT_NEXT); 
         await this.#fillInput(SkypeScrapper.#INPUT_PASSWORD, this.#password);
         await this.#clickElement(SkypeScrapper.#INPUT_SUBMIT_SIGNIN);
-        await this.#clickElement(SkypeScrapper.#BUTTON_GOT_IT);
+        try {
+            await this.#clickElement(SkypeScrapper.#BUTTON_GOT_IT);
+        }
+        catch (e) {}
     }
 
     async disconnect() {
