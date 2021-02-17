@@ -63,6 +63,11 @@ class SkypeScrapper {
              : SkypeScrapper.STATUS_OFFLINE;
     }
 
+    async doScreenshot() {
+        if (this.#page) 
+            await this.#page.screenshot({ path: "screenshot.png" });
+    }
+
     static STATUS_ONLINE       = 1;
     static STATUS_OFFLINE      = 2;
     static STATUS_CHECK_FAILED = 3;

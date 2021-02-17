@@ -49,5 +49,6 @@ await new Scheduler().runForever(async () => {
     }
     catch (error) {
         console.error("Could not check if the user is online:", error);
+        skype_scrapper.doScreenshot();
     }
 }, configs.check_interval);
