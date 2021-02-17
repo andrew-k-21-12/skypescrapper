@@ -30,3 +30,12 @@ Install all required dependencies: `npm i`.
 ## EXECUTION
 
 Fire `npm start` and wait for logs to appear in the configured logs file.
+
+Linux systems don't support `--lang` option for Chromium
+so make sure to configure `LANG` instead for your session:
+```
+LANG=en_US.UTF-8
+```
+
+For initial configs (such as bypassing Skype's unusal location security checks)
+it's better to use `npm run interactive` manually.

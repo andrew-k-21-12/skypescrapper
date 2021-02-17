@@ -1,6 +1,8 @@
 configs.json
 credentials.json
 targets.json
+screenshot.png
+contents.html
 logs.csv
 
 node_modules/
