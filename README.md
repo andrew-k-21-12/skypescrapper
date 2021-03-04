@@ -43,12 +43,10 @@ it's better to use `npm run interactive` manually.
 
 ## TO DO
 
-1. Extract workflows, move utility classes into helpers dir.
+1. Profile everything.
 
 2. Add prerequisites section (NodeJS 14, NPM, Linux libs) and all other updates here.
 
 3. Add here: Don't run from root! Commands to keep working in the background.
 
-4. Profile everything.
-
-5. Write octave scripts for analysis.
+4. Write octave scripts for analysis.

@@ -2,9 +2,9 @@
 
 import readline from "readline-sync";
 
-import DynamicConfigs     from "./DynamicConfigs.js";
-import BrowserManipulator from "./BrowserManipulator.js";
-import SkypeScrapper      from "./SkypeScrapper.js";
+import DynamicConfigs     from "../DynamicConfigs.js";
+import BrowserManipulator from "../utility/BrowserManipulator.js";
+import SkypeScrapper      from "../SkypeScrapper.js";
 
 
 

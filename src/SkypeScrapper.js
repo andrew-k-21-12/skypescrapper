@@ -1,6 +1,6 @@
 "use strict";
 
-import BrowserManipulator from "./BrowserManipulator.js";
+import BrowserManipulator from "./utility/BrowserManipulator.js";
 
 
 

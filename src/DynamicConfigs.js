@@ -55,6 +55,11 @@ class DynamicConfigs {
 
     /* Public - sensitive configs. */
 
+    /** Whether the interactive mode should be preferred. */
+    get interactive() {
+        return this.#getConfig("interactive", null);
+    }
+
     /** Skype credentials or null if nothing has been provided in the JSON. */
     get credentials() {
         return this.#getConfig("credentials", null);
