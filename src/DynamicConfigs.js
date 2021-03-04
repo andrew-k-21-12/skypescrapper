@@ -11,8 +11,9 @@ const CONFIGS_PATH = "./configs.json"
 const DefaultConfigs = Object.freeze({
     DEBUG:             false,
     CHECK_INTERVAL_MS: 5 * 60 * 1000,
-    OUT_DIRECTORY:     "./out",       // relative to the execution folder
-    STATUSES_FILENAME: "statuses.csv"
+    OUT_DIRECTORY:     "./out",        // relative to the execution folder
+    STATUSES_FILENAME: "statuses.csv",
+    CONTENTS_FILENAME: "contents.html"
 });
 
 /**
@@ -41,6 +42,11 @@ class DynamicConfigs {
     /** Filename to write statuses logs into. */
     get statusesFilename() {
         return this.#getConfig(null, DefaultConfigs.STATUSES_FILENAME);
+    }
+
+    /** Filename to write HTML contents into. */
+    get contentsFilename() {
+        return this.#getConfig(null, DefaultConfigs.CONTENTS_FILENAME);
     }
 
 

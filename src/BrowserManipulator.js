@@ -92,10 +92,25 @@ class BrowserManipulator {
      *         or screenshot was not captured or saved for some reason.
      */
     async saveScreenshot(page, directory, name) {
-        const filesHelper = new FilesHelper();
-        if (!filesHelper.recursiveMkdirSync(directory))
+        if (!this.#filesHelper.recursiveMkdirSync(directory))
             throw new Error("Could not prepare an output directory to save a screenshot");
         await page.screenshot({ path: `${directory}/${name}` });
+    }
+
+    /**
+     * Saves all current HTML contents of the page into a file.
+     * 
+     * @param page               Page to get contents from.
+     * @param {string} directory Directory to save contents into.
+     * @param {string} name      File name to save contents with.
+     * 
+     * @throws Throws an exception if a wrong page has been provided
+     *         or contents saving has failed for some reason.
+     */
+    async saveContent(page, directory, name) {
+        const content = await page.content();
+        if (!this.#filesHelper.writeFileSync(content, directory, name))
+            throw new Error("Could not write page's contents to a file");
     }
 
 
@@ -115,6 +130,11 @@ class BrowserManipulator {
         const page = await browser.newPage();
         await page.goto(CHROME_LANGUAGES_SETTINGS_URL);
         await page.waitForTimeout(LANGUAGES_SETTINGS_TIMEOUT_MS);
+    }
+
+    /** Dynamic getter for a files helper. */
+    get #filesHelper() {
+        return new FilesHelper();
     }
 
 }

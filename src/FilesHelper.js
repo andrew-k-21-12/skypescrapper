@@ -46,6 +46,27 @@ class FilesHelper {
         }
     }
 
+    /**
+     * Synchronously writes contents to a file.
+     * 
+     * @param {string} contents  Contents to be written.
+     * @param {string} directory Directory to locate a file in.
+     * @param {string} name      Filename to write the contents to.
+     * 
+     * @returns True on success.
+     */
+    writeFileSync(contents, directory, name) {
+        if (!this.recursiveMkdirSync(directory))
+            return false;
+        try {
+            fs.writeFileSync(`${directory}/${name}`, contents);
+            return true;
+        }
+        catch (_) {
+            return false;
+        }
+    }
+
 }
 
 export default FilesHelper;

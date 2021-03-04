@@ -193,6 +193,9 @@ class SkypeScrapper {
             await this.#browserManipulator.saveScreenshot(this.#page, directory, name);
     }
 
+    /** Skype app's web page. */
+    static get TARGET_URL() { return TARGET_URL; }
+
     /** All possible user statuses. */
     static get Statuses() { return Statuses; }
 

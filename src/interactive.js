@@ -1,75 +1,105 @@
 "use strict";
 
-import puppeteer from "puppeteer";
-import readline  from "readline-sync";
-import fs        from "fs";
+import readline from "readline-sync";
 
-const browser = await puppeteer.launch({ 
-    args: ["--lang=en"],
-    headless: true
-});
+import DynamicConfigs     from "./DynamicConfigs.js";
+import BrowserManipulator from "./BrowserManipulator.js";
+import SkypeScrapper      from "./SkypeScrapper.js";
 
-const page = await browser.newPage();
-await page.goto("https://web.skype.com");
 
-const save_html = async () => {
-    const html = await page.content();
-    fs.writeFileSync("./contents.html", html);
+
+// These instances will be required frequently, so let's allocate them only once.
+const dynamic_configs     = new DynamicConfigs();
+const browser_manipulator = new BrowserManipulator();
+
+
+
+// Navigating to the target URL.
+const browser = await browser_manipulator.launchBrowser();
+const page    = await browser.newPage();
+await page.goto(SkypeScrapper.TARGET_URL);
+
+
+
+/**
+ * Saves a screenshot of the current state.
+ * 
+ * @throws Throws exceptions on various errors. 
+ */
+const save_screenshot = async () => {
+    await browser_manipulator.saveScreenshot(
+        page, 
+        dynamic_configs.outDirectory,
+        "contents.png"
+    );
 };
 
+/**
+ * Saves current HTML contents.
+ * 
+ * @throws Throws exceptions on various errors. 
+ */
+const save_content = async () => {
+    await browser_manipulator.saveContent(
+        page, 
+        dynamic_configs.outDirectory,
+        dynamic_configs.contentsFilename
+    );
+};
+
+/**
+ * Performs typing into a target input.
+ * 
+ * @param {boolean} is_password Whether the console input for a value should be hidden.
+ * 
+ * @throws Throws exceptions on various errors. 
+ */
 const perform_typing = async (is_password = false) => {
-    const selector = readline.question("Gimme target selector: ");
-    const params   = is_password ? { hideEchoBack: true, mask: '' } : null;
-    const value    = readline.question("Gimme value to be typed: ", params);
-    try {
-        await page.waitForSelector(selector, { visible: true });
-        await page.focus(selector);
-        await page.keyboard.type(value);
-    }
-    catch (error) {
-        console.error("Could not perform typing:", error);
-    }
+    const selector = readline.question("Type a selector to find a target input: ");
+    const options  = is_password ? { hideEchoBack: true, mask: '' } : null;
+    const value    = readline.question("Type a value to fill the target input with: ", options);
+    await browser_manipulator.typeIntoInput(page, selector, value);
 };
 
+/**
+ * Performs a click on a target button.
+ * 
+ * @throws Throws exceptions on various errors. 
+ */
 const perform_click = async () => {
-    const selector = readline.question("Gimme target selector: ");
-    try {
-        await page.waitForSelector(selector, { visible: true });
-        await page.click(selector);
-    }
-    catch (error) {
-        console.error("Could not perform a click:", error);
-    }
+    const selector = readline.question("Type a selector to find a target button: ");
+    await browser_manipulator.clickElement(page, selector);
 };
 
-const command_screenshot = "SCREENSHOT";
-const command_save_html  = "SAVE_HTML";
-const command_type       = "TYPE";
-const command_type_pass  = "TYPE_PASS";
-const command_click      = "CLICK";
-const commands = [ command_screenshot, command_save_html, command_type, command_type_pass, command_click ];
+
+
+// All commands with captions and corresponding actions.
+const commands = [
+    { caption: "SAVE SCREENSHOT",          action: save_screenshot                        },
+    { caption: "SAVE HTML CONTENT",        action: save_content                           },
+    { caption: "TYPE INTO INPUT",          action: perform_typing                         },
+    { caption: "TYPE PASSWORD INTO INPUT", action: async () => await perform_typing(true) },
+    { caption: "CLICK BUTTON",             action: perform_click                          }
+]; 
+
+// Executing requested commands in the loop.
 for (;;) {
-    const index = readline.keyInSelect(commands, "What should I do?");
+    const index = readline.keyInSelect(
+        commands.map(command => command.caption), 
+        "What should be done?"
+    );
     if (index < 0)
         break;
-    switch (commands[index]) {
-        case command_screenshot:
-            await page.screenshot({ path: "screenshot.png" });
-            break;
-        case command_save_html:
-            await save_html();
-            break;
-        case command_type:
-            await perform_typing();
-            break;
-        case command_type_pass:
-            await perform_typing(true);
-            break;
-        case command_click:
-            await perform_click();
-            break;
+    try {
+        await commands.map(command => command.action)[index]();
+    }
+    catch (error) {
+        console.error("Could not execute command:", error);
     }
 }
 
+
+
+// Closing browser finally.
 await browser.close();
  

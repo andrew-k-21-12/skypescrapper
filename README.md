@@ -43,8 +43,12 @@ it's better to use `npm run interactive` manually.
 
 ## TO DO
 
-1. Refactor and reorganize the code for the interactive mode (extract into workflows).
+1. Extract workflows, move utility classes into helpers dir.
 
 2. Add prerequisites section (NodeJS 14, NPM, Linux libs) and all other updates here.
 
 3. Add here: Don't run from root! Commands to keep working in the background.
+
+4. Profile everything.
+
+5. Write octave scripts for analysis.
