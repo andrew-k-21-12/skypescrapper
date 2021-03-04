@@ -43,8 +43,8 @@ it's better to use `npm run interactive` manually.
 
 ## TO DO
 
-1. Refactor and reorganize the code.
+1. Refactor and reorganize the code for the interactive mode (extract into workflows).
 
-2. Better interactive mode and helpful scripts with clarifications.
+2. Add prerequisites section (NodeJS 14, NPM, Linux libs) and all other updates here.
 
-3. Add prerequisites section (NodeJS 14, NPM, Linux libs).
+3. Add here: Don't run from root! Commands to keep working in the background.

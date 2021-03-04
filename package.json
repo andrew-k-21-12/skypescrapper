@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-json-modules src/index.js",
-    "interactive": "node --experimental-json-modules src/interactive.js"
+    "start": "node --experimental-json-modules index.js"
   },
   "dependencies": {
     "puppeteer": "^7.1.0",
