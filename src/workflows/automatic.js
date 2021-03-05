@@ -50,6 +50,7 @@ catch (error) {
 
 // Scheduling target users monitoring with a dynamic interval.
 {
+    let iteration_number = 0;    // to do regular refreshing
     let latest_console_username; // to type a target username in the console only once
     await new Scheduler().runWithDynamicInterval(
         async () => {
@@ -81,12 +82,23 @@ catch (error) {
                 catch (error) {
                     console.error(`Processing of ${target}'s status has failed:`, error);
                     await skype_scrapper.saveScreenshot(dynamic_configs.outDirectory, "check_status_failure.png");
+                    console.log("- - - - - Trying to reload to fix");
+                    await skype_scrapper.reloadPage();
                 }
             }
 
             // Logging successful statuses fetching.
             console.log("All statuses have been fetched:", new Date().toString());
             await skype_scrapper.saveScreenshot(dynamic_configs.outDirectory, "check_statuses_success.png");
+
+            // Checking if it's time to do a refresh.
+            ++iteration_number;
+            if (iteration_number === dynamic_configs.refreshOnIteration) {
+                iteration_number = 0;
+                console.log("Reloading the working page to clean up RAM");
+                await skype_scrapper.reloadPage();
+            }
+
         },
         () => dynamic_configs.checkIntervalMs
     );

@@ -181,6 +181,16 @@ class SkypeScrapper {
     }
 
     /**
+     * Reloads the current page to clean up RAM.
+     * 
+     * @throws Throws an exception if the reloading has failed for some reason.
+     */
+    async reloadPage() {
+        if (this.#page) 
+            await this.#page.reload();
+    }
+
+    /**
      * Saves a screenshot of the current state.
      * 
      * @param {string} directory Directory to save a screenshot into.

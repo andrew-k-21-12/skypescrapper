@@ -9,11 +9,12 @@ const CONFIGS_PATH = "./configs.json"
  * Configs to be used by default if a corresponding dynamic config is not available.
  */
 const DefaultConfigs = Object.freeze({
-    DEBUG:             false,
-    CHECK_INTERVAL_MS: 5 * 60 * 1000,
-    OUT_DIRECTORY:     "./out",        // relative to the execution folder
-    STATUSES_FILENAME: "statuses.csv",
-    CONTENTS_FILENAME: "contents.html"
+    DEBUG:                false,
+    CHECK_INTERVAL_MS:    5 * 60 * 1000,
+    OUT_DIRECTORY:        "./out",         // relative to the execution folder
+    STATUSES_FILENAME:    "statuses.csv",
+    CONTENTS_FILENAME:    "contents.html",
+    REFRESH_ON_ITERATION: 5
 });
 
 /**
@@ -22,7 +23,7 @@ const DefaultConfigs = Object.freeze({
  */
 class DynamicConfigs {
 
-    /* Public - safe configs. */
+    /* Public. */
 
     /** Whether a debug mode should be enabled. */
     get debug() {
@@ -32,6 +33,26 @@ class DynamicConfigs {
     /** How often to check statuses. */
     get checkIntervalMs() {
         return this.#getConfig("check_interval_ms", DefaultConfigs.CHECK_INTERVAL_MS);
+    }
+
+    /** Whether the interactive mode should be preferred. */
+    get interactive() {
+        return this.#getConfig("interactive", null);
+    }
+
+    /** Skype credentials or null if nothing has been provided in the JSON. */
+    get credentials() {
+        return this.#getConfig("credentials", null);
+    }
+
+    /** Target usernames to be monitored or null of nothing has been provided in the JSON. */
+    get targets() {
+        return this.#getConfig("targets", null);
+    }
+
+    /** Each n-th iteration should do a refresh after processing. */
+    get refreshOnIteration() {
+        return this.#getConfig("refresh_on_iteration", DefaultConfigs.REFRESH_ON_ITERATION);
     }
 
     /** Directory to place output files into. */
@@ -47,27 +68,6 @@ class DynamicConfigs {
     /** Filename to write HTML contents into. */
     get contentsFilename() {
         return this.#getConfig(null, DefaultConfigs.CONTENTS_FILENAME);
-    }
-
-
-
-
-
-    /* Public - sensitive configs. */
-
-    /** Whether the interactive mode should be preferred. */
-    get interactive() {
-        return this.#getConfig("interactive", null);
-    }
-
-    /** Skype credentials or null if nothing has been provided in the JSON. */
-    get credentials() {
-        return this.#getConfig("credentials", null);
-    }
-
-    /** Target usernames to be monitored or null of nothing has been provided in the JSON. */
-    get targets() {
-        return this.#getConfig("targets", null);
     }
 
 
