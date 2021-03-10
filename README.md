@@ -19,7 +19,7 @@ To make it work anyway, the following dependencies should be installed:
 
 1. [**Node.js v14.15.4**](https://nodejs.org) - 
 this version (and **v14.16.0** also) was used for testing.
-Maybe other versions will work too
+Maybe other versions will work too,
 but it's better to prefer fresh versions
 to make all ES6 features work.
 
