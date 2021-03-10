@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-json-modules index.js"
+    "start": "node --experimental-json-modules index.js",
+    "visualise": "octave scripts/visualise.m"
   },
   "dependencies": {
     "puppeteer": "^7.1.0",
