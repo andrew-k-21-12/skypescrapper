@@ -140,3 +140,10 @@ for [GNU Octave](https://www.gnu.org/software/octave).
 If you don't change the path to the statuses log,
 it's even simplier to visualise the data with `npm run visualise`
 (make sure you have [GNU Octave installed](https://www.gnu.org/software/octave/download)).
+
+
+## FINITA LA COMMEDIA
+
+After running this scrapper for about 3 weeks without interruptions
+Skype blocks your account and requires you to change your password.
+That means these scripts are not very viable, but it was at least fun to write them.

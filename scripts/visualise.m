@@ -19,13 +19,20 @@ data_timestamps = data{3};
 for unique_username = unique(data_usernames)'
 
     % Fetching all data per user.
-    user_indices    = find(strcmp(data_usernames, unique_username));
-    user_statuses   = data_statuses(user_indices);
-    user_timestamps = data_timestamps(user_indices);
+    user_indices            = find(strcmp(data_usernames, unique_username));
+    user_statuses           = data_statuses(user_indices);
+    user_timestamps         = data_timestamps(user_indices);
+    user_timestamps_online  = user_timestamps(user_statuses == 1);
+    user_timestamps_offline = user_timestamps(user_statuses == 2);
+    user_timestamps_failed  = user_timestamps(user_statuses == 0);
 
     % Drawing a graph without horizontal ticks.
     figure
-    plot(user_timestamps, user_statuses, '-');
+    hold on
+    scatter(user_timestamps_online,  repmat(1, length(user_timestamps_online),  1), 2, 'g', 's', "filled");
+    scatter(user_timestamps_offline, repmat(1, length(user_timestamps_offline), 1), 1, 'y', 's', "filled");
+    scatter(user_timestamps_failed,  repmat(1, length(user_timestamps_failed),  1), 2, 'r', 's', "filled");
+    hold off
     title(unique_username);
     xlabel("Date, time");
     ylabel("Status");
@@ -49,5 +56,5 @@ for unique_username = unique(data_usernames)'
 
 endfor
 
-% Keeping plots on the screen.
+% Keeping graphs on the screen.
 pause
