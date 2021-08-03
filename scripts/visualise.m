@@ -2,42 +2,51 @@
 clear; close all; clc
 
 % Configs.
-statuses_file = "./out/statuses.csv";
-tick_interval = 30 * 60 * 1000; % 30 mins
+DATA_FILE         = "./out/statuses.csv";
+MIN_TICK_INTERVAL = 10 * 60 * 1000;       % 10 mins is a minimal distance between horizontal ticks
 
 % Reading all fetched statuses.
-fd       = fopen(statuses_file);
-statuses = textscan(fd, "%s,%u8,%u64", "Delimiter", ',');
-fclose(fd);
+fd_data = fopen(DATA_FILE);
+data    = textscan(fd_data, "%s,%u8,%u64", "Delimiter", ',');
+fclose(fd_data);
 
-% Looking for unique usernames.
-usernames        = statuses{1};
-unique_usernames = unique(usernames);
+% Getting data slices.
+data_usernames  = data{1};
+data_statuses   = data{2};
+data_timestamps = data{3};
 
-% Preparing time labels to put on plots.
-timestamps       = statuses{3};
-time_ticks       = [];
-time_labels      = repmat(cell, 0);
-latest_timestamp = timestamps(1);
-for timestamp = timestamps'
-	if (timestamp - latest_timestamp > tick_interval)
-		latest_timestamp = timestamp;
-		time_ticks       = [time_ticks ; timestamp];
-		time_labels      = [time_labels ; strftime("%d-%H:%M", localtime(timestamp / 1000))];
-	endif
-endfor
+% Drawing an activity graph per each user.
+for unique_username = unique(data_usernames)'
 
-% Plotting an activity graph per each user.
-for unique_username = unique_usernames'
+    % Fetching all data per user.
+    user_indices    = find(strcmp(data_usernames, unique_username));
+    user_statuses   = data_statuses(user_indices);
+    user_timestamps = data_timestamps(user_indices);
+
+    % Drawing a graph without horizontal ticks.
     figure
-    username_indices    = find(strcmp(usernames, unique_username));
-    username_timestamps = timestamps(username_indices);
-    plot(username_timestamps, statuses{2}(username_indices), ".-");
-    set(gca, "xtick", time_ticks);
-    set(gca, "xticklabel", time_labels);
+    plot(user_timestamps, user_statuses, '-');
     title(unique_username);
-    xlabel("Day-hour:minute");
-    ylabel("Status, 1 - online");
+    xlabel("Date, time");
+    ylabel("Status");
+    set(gca, "xtick", []);
+    set(gca, "xticklabel", []);
+
+    % Drawing time ticks (horizontal ones).
+    last_status    = -1;
+    last_timestamp = -1;
+    for user_index = 1:length(user_indices)
+        current_status    = user_statuses(user_index);
+        current_timestamp = user_timestamps(user_index);
+        % Drawing a tick only if the last status has changed and required time interval is reached.
+        if (current_status != last_status && current_timestamp - last_timestamp > MIN_TICK_INTERVAL)
+            tick_label = strftime("%d.%m %H:%M", localtime(current_timestamp / 1000));
+            text(current_timestamp, 1, tick_label, "rotation", 90, "horizontalalignment", "right", "fontsize", 11);
+            last_timestamp = current_timestamp;
+        endif
+        last_status = current_status;
+    endfor
+
 endfor
 
 % Keeping plots on the screen.
